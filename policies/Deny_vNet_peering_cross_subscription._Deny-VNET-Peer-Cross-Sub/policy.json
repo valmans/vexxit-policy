@@ -1,0 +1,51 @@
+{
+ "properties": {
+  "displayName": "Deny vNet peering cross subscription.",
+  "policyType": "Custom",
+  "mode": "All",
+  "description": "This policy denies the creation of vNet Peerings outside of the same subscriptions under the assigned scope.",
+  "metadata": {
+   "version": "1.0.1",
+   "category": "Network",
+   "createdBy": "f16b1c6e-87f0-4463-bd9a-016fe0f212ec",
+   "createdOn": "2022-07-10T16:38:36.5814526Z",
+   "updatedBy": null,
+   "updatedOn": null
+  },
+  "parameters": {
+   "effect": {
+    "type": "String",
+    "metadata": {
+     "displayName": "Effect",
+     "description": "Enable or disable the execution of the policy"
+    },
+    "allowedValues": [
+     "Audit",
+     "Deny",
+     "Disabled"
+    ],
+    "defaultValue": "Deny"
+   }
+  },
+  "policyRule": {
+   "if": {
+    "allOf": [
+     {
+      "field": "type",
+      "equals": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings"
+     },
+     {
+      "field": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings/remoteVirtualNetwork.id",
+      "notcontains": "[subscription().id]"
+     }
+    ]
+   },
+   "then": {
+    "effect": "[parameters('effect')]"
+   }
+  }
+ },
+ "id": "/providers/Microsoft.Management/managementGroups/vexxit/providers/Microsoft.Authorization/policyDefinitions/Deny-VNET-Peer-Cross-Sub",
+ "type": "Microsoft.Authorization/policyDefinitions",
+ "name": "Deny-VNET-Peer-Cross-Sub"
+}

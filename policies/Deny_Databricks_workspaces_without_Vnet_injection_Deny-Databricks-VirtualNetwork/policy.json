@@ -1,0 +1,63 @@
+{
+ "properties": {
+  "displayName": "Deny Databricks workspaces without Vnet injection",
+  "policyType": "Custom",
+  "mode": "Indexed",
+  "description": "Enforces the use of vnet injection for Databricks workspaces.",
+  "metadata": {
+   "version": "1.0.0",
+   "category": "Databricks",
+   "createdBy": "f16b1c6e-87f0-4463-bd9a-016fe0f212ec",
+   "createdOn": "2022-07-10T16:38:20.6967946Z",
+   "updatedBy": null,
+   "updatedOn": null
+  },
+  "parameters": {
+   "effect": {
+    "type": "String",
+    "metadata": {
+     "displayName": "Effect",
+     "description": "Enable or disable the execution of the policy"
+    },
+    "allowedValues": [
+     "Audit",
+     "Disabled",
+     "Deny"
+    ],
+    "defaultValue": "Deny"
+   }
+  },
+  "policyRule": {
+   "if": {
+    "allOf": [
+     {
+      "field": "type",
+      "equals": "Microsoft.Databricks/workspaces"
+     },
+     {
+      "anyOf": [
+       {
+        "field": "Microsoft.DataBricks/workspaces/parameters.customVirtualNetworkId.value",
+        "exists": false
+       },
+       {
+        "field": "Microsoft.DataBricks/workspaces/parameters.customPublicSubnetName.value",
+        "exists": false
+       },
+       {
+        "field": "Microsoft.DataBricks/workspaces/parameters.customPrivateSubnetName.value",
+        "exists": false
+       }
+      ]
+     }
+    ]
+   },
+   "then": {
+    "effect": "[parameters('effect')]"
+   }
+  }
+ },
+ "id": "/providers/Microsoft.Management/managementGroups/vexxit/providers/Microsoft.Authorization/policyDefinitions/Deny-Databricks-VirtualNetwork",
+ "type": "Microsoft.Authorization/policyDefinitions",
+ "name": "Deny-Databricks-VirtualNetwork"
+}

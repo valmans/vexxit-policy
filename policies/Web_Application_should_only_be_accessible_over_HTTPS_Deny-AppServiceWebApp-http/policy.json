@@ -1,0 +1,55 @@
+{
+ "properties": {
+  "displayName": "Web Application should only be accessible over HTTPS",
+  "policyType": "Custom",
+  "mode": "Indexed",
+  "description": "Use of HTTPS ensures server/service authentication and protects data in transit from network layer eavesdropping attacks.",
+  "metadata": {
+   "version": "1.0.0",
+   "category": "App Service",
+   "createdBy": "f16b1c6e-87f0-4463-bd9a-016fe0f212ec",
+   "createdOn": "2022-07-10T16:38:34.5863294Z",
+   "updatedBy": null,
+   "updatedOn": null
+  },
+  "parameters": {
+   "effect": {
+    "type": "String",
+    "metadata": {
+     "displayName": "Effect",
+     "description": "Enable or disable the execution of the policy"
+    },
+    "allowedValues": [
+     "Audit",
+     "Disabled",
+     "Deny"
+    ],
+    "defaultValue": "Deny"
+   }
+  },
+  "policyRule": {
+   "if": {
+    "allOf": [
+     {
+      "field": "type",
+      "equals": "Microsoft.Web/sites"
+     },
+     {
+      "field": "kind",
+      "like": "app*"
+     },
+     {
+      "field": "Microsoft.Web/sites/httpsOnly",
+      "equals": "false"
+     }
+    ]
+   },
+   "then": {
+    "effect": "[parameters('effect')]"
+   }
+  }
+ },
+ "id": "/providers/Microsoft.Management/managementGroups/vexxit/providers/Microsoft.Authorization/policyDefinitions/Deny-AppServiceWebApp-http",
+ "type": "Microsoft.Authorization/policyDefinitions",
+ "name": "Deny-AppServiceWebApp-http"
+}
